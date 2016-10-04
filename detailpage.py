@@ -1,9 +1,15 @@
+# -*- coding: utf-8 -*- 
+import sys
 import requests
 import codecs
 from lxml import html
 import sqlite3
 #(u'/rs/rent/2016-01/40839.shtml',)
 #encoded = [[s.encode('utf8') for s in t] for t in resultsList]
+
+reload(sys)
+sys.setdefaultencoding('utf-8')
+
 sqlite_file = 'montreal.sqlite'
 
 conn = sqlite3.connect(sqlite_file)
@@ -39,20 +45,20 @@ for plink in plinks:
     
     #rent = tree.xpath('//div[@id="detailpage_left_side"]/div[1]/ul/li[1]/text()')
     #wrent = " ".join(rent[1].split())
-    #rstyle = tree.xpath('//div[@id="detailpage_left_side"]/div[1]/ul/li[2]/text()')
-    #wstyle = " ".join(rstyle[1].split())
-    #method = tree.xpath('//div[@id="detailpage_left_side"]/div[1]/ul/li[3]/text()')
-    #wmethod = " ".join(method[1].split())
-  #.//*[@id='detailpage_left_side']/div[1]/ul/li[3]/span 
+    #.//*[@id='detailpage_left_side']/div[1]/ul/li[3]/span 
     for item in tree.xpath('//div[@id="detailpage_left_side"]/div[1]/ul/li'):
         tt = item.xpath('./span/text()')
         print tt[0]
         pp = item.xpath('./text()')
-        print pp[0]
-        print 'this is 01'
-        print pp[1] 
-    #nearby = tree.xpath('//div[@id="detailpage_left_side"]/div[1]/ul/li[12]/text()')
-    #wnearby = " ".join(nearby[1].split())
+        #print pp[0]
+        #print pp[1] 
+        
+        #detail = " ".join((tt[0]+pp[1]).split())
+        #print detail
+        #if '每月租金'.decode('latin1').encode('utf8') in tt[0]:
+        if u'每月租金' in tt[0]:
+           wrent =  " ".join(pp[1].split())
+           print 'rent is ', wrent  
     #rent = tree.xpath('//div[@id="detailpage_left_side"]/div[1]/ul/li[1]/text()')
     #desc
     #rent = tree.xpath('//div[@id="detailpage_left_side"]/div[1]/ul/li[1]/text()')
