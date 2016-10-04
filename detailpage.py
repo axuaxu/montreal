@@ -58,7 +58,30 @@ for plink in plinks:
         #if '每月租金'.decode('latin1').encode('utf8') in tt[0]:
         if u'每月租金' in tt[0]:
            wrent =  " ".join(pp[1].split())
-           print 'rent is ', wrent  
+           #print 'rent is ', wrent
+        if u'房屋类型' in tt[0]:
+           wstyle =  " ".join(pp[1].split())
+        if u'出租方式' in tt[0]:
+           wmethod =  " ".join(pp[1].split())
+        if u'周边信息' in tt[0]:
+           wcircle =  " ".join(pp[1].split())
+        if u'出租房间' in tt[0]:
+           wrooms =  " ".join(pp[1].split())
+        if u'租约长短' in tt[0]:
+           wlength =  " ".join(pp[1].split())
+        if u'入住时间' in tt[0]:
+           wintime =  " ".join(pp[1].split())
+        if u'使用条件' in tt[0]:
+           wcondition =  " ".join(pp[1].split())
+        if u'附属设施' in tt[0]:
+           wequip =  " ".join(pp[1].split())
+        if u'周边环境' in tt[0]:
+           wenv =  " ".join(pp[1].split())
+        if u'附近地铁' in tt[0]:
+           wmetro =  " ".join(pp[1].split())
+        #if u'每月租金' in tt[0]:
+          # wrent =  " ".join(pp[1].split())
+   
     #rent = tree.xpath('//div[@id="detailpage_left_side"]/div[1]/ul/li[1]/text()')
     #desc
     #rent = tree.xpath('//div[@id="detailpage_left_side"]/div[1]/ul/li[1]/text()')
@@ -73,6 +96,6 @@ for plink in plinks:
     #print wrent
     #print rstyle[1],method[1],rooms[1],length[1],intime[1]
     #print wstyle,wmethod,wrooms,wlength,wintime,wtenant,wcondition,wequip,wenv
-    #c.execute('insert into pageinfo ("title") values (?)',(title[0],)) 
+    c.execute('insert into pageinfo ("title","address","rent","rstyle","method","rooms","length","intime","condition","equip","env","metro") values (?,?,?,?,?,?,?,?,?,?,?,?)',(title[0],waddress,wrent,wstyle,wmethod,wrooms,wlength,wintime,wcondition,wequip,wenv,wmetro)) 
 conn.commit()  
 conn.close()
