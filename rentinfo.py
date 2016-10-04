@@ -52,6 +52,19 @@ for plink in plinks:
     #length
     intime = tree.xpath('//div[@id="detailpage_left_side"]/div[1]/ul/li[7]/text()')
     wintime = " ".join(intime[1].split())
+    
+    tenant = tree.xpath('//div[@id="detailpage_left_side"]/div[1]/ul/li[8]/text()')
+    wtenant = " ".join(tenant[1].split())
+    
+    condition = tree.xpath('//div[@id="detailpage_left_side"]/div[1]/ul/li[9]/text()')
+    wcondition = " ".join(condition[1].split())
+    
+    equip = tree.xpath('//div[@id="detailpage_left_side"]/div[1]/ul/li[10]/text()')
+    wequip = " ".join(equip[1].split())
+    env = tree.xpath('//div[@id="detailpage_left_side"]/div[1]/ul/li[11]/text()')
+    wenv = " ".join(env[1].split())
+    #nearby = tree.xpath('//div[@id="detailpage_left_side"]/div[1]/ul/li[12]/text()')
+    #wnearby = " ".join(nearby[1].split())
     #rent = tree.xpath('//div[@id="detailpage_left_side"]/div[1]/ul/li[1]/text()')
     #desc
     #rent = tree.xpath('//div[@id="detailpage_left_side"]/div[1]/ul/li[1]/text()')
@@ -65,7 +78,7 @@ for plink in plinks:
     print waddress
     print wrent
     print rstyle[1],method[1],rooms[1],length[1],intime[1]
-    print wstyle,wmethod,wrooms,wlength,wintime
+    print wstyle,wmethod,wrooms,wlength,wintime,wtenant,wcondition,wequip,wenv
     #c.execute('insert into pageinfo ("title") values (?)',(title[0],)) 
 conn.commit()  
 conn.close()
