@@ -33,6 +33,11 @@ for plink in plinks:
     print purl
     r = requests.get(purl)
     tree = html.fromstring(r.content)
-    title = tree.xpath('//span[@class="detail_top_title_text"]/text()').decode('utf-8')
-    print title   
+    title = tree.xpath('//span[@class="detail_top_title_text"]/text()')
+    #stitle = str(title).decode('utf-8')
+    #dtitle = stitle.decode('gb18030').decode('utf-8')
+    print title[0]
+    
+    c.execute('insert into pageinfo ("title") values (?)',(title[0],)) 
+conn.commit()  
 conn.close()
