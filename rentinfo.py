@@ -31,8 +31,8 @@ for plink in plinks:
     slink.replace("h","")
     purl = base+ slink
     print purl
-    #r = requests.get(purl)
-    #tree = html.fromstrin(r.content)
-    #title = tree.xpath('//span[@class="detail_top_title_text"]/text()')
-    #print title   
+    r = requests.get(purl)
+    tree = html.fromstring(r.content)
+    title = tree.xpath('//span[@class="detail_top_title_text"]/text()')
+    print title   
 conn.close()
