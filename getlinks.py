@@ -4,15 +4,14 @@ from lxml import html
 import sqlite3
 
 sqlite_file = 'montreal.sqlite'
-tlink = 'tlink'
 
 conn = sqlite3.connect(sqlite_file)
-c = conn.cursor
+c = conn.cursor()
 
 
 base = 'http://www.iu91.com/content/listRS?page='
 
-for i in range(2,4):
+for i in range(1,40):
     murl = base + str(i)
     r = requests.get(murl)
     fname = 'page_'+str(i)+'.html'
@@ -21,6 +20,9 @@ for i in range(2,4):
     f.close()
     tree = html.fromstring(r.content)
     rlinks = tree.xpath('//span[@class="title_move"]/a/@href')
-
+    for rlink in rlinks:
+        c.execute('insert into pagelinks("link") values (?)',(rlink,))     
 print rlinks
 print len(rlinks)
+conn.commit()
+conn.close()
