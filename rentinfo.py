@@ -33,6 +33,6 @@ for plink in plinks:
     print purl
     r = requests.get(purl)
     tree = html.fromstring(r.content)
-    title = tree.xpath('//span[@class="detail_top_title_text"]/text()')
+    title = tree.xpath('//span[@class="detail_top_title_text"]/text()').decode('utf-8')
     print title   
 conn.close()
