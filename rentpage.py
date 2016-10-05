@@ -18,6 +18,18 @@ c = conn.cursor()
 
 base = 'http://www.iu91.com'
 
+wrent = ''
+wstyle =''
+wmethod = ''
+wcircle = ''
+wrooms = ''
+wlength = ''
+wintime = ''
+wcondition = ''
+wequip = ''
+wenv = ''
+wmetro = ''
+
 conn.text_factory = bytes
 plinks = c.execute("select link from plinks where id<30")
 rows = plinks.fetchall()
@@ -68,17 +80,6 @@ for plink in rows:
         except IndexError:
             continue
         #if '每月租金'.decode('latin1').encode('utf8') in tt[0]:
-        wrent = ''
-        wstyle =''
-        wmethod = ''
-        wcircle = ''
-        wrooms = ''
-        wlength = ''
-        wintime = ''
-        wcondition = ''
-        wequip = ''
-        wenv = ''
-        wmetro = '' 
         if u'每月租金' in tt[0]:
            wrent =  " ".join(pp[1].split())
            print 'rent is ', wrent
@@ -119,7 +120,7 @@ for plink in rows:
     #print wrent
     #print rstyle[1],method[1],rooms[1],length[1],intime[1]
     #print wstyle,wmethod,wrooms,wlength,wintime,wtenant,wcondition,wequip,wenv
-    
+    print wrent   
     rentsale = tree.xpath('//div[@class="title"]/span[1]/text()')
     #print rentsale
     house = tree.xpath('//div[@class="title"]/span[2]/text()')
@@ -128,7 +129,7 @@ for plink in rows:
        print 'for rent: ',rentsale[0]
        if u'住宅' in house:
           print 'house:',house[0]
+          print wrent
           c.execute('insert into rentinfo ("title","address","rent","rstyle","method","rooms","length","intime","condition","equip","env","metro") values (?,?,?,?,?,?,?,?,?,?,?,?)', (title[0],waddress,wrent,wstyle,wmethod,wrooms,wlength,wintime,wcondition,wequip,wenv,wmetro,)) 
-conn.commit()  
-
+          conn.commit()  
 conn.close()
