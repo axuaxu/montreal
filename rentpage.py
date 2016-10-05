@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*- 
 import sys
+import re
 import requests
 import codecs
 from lxml import html
@@ -31,7 +32,7 @@ wenv = ''
 wmetro = ''
 
 conn.text_factory = bytes
-plinks = c.execute("select link from plinks where id=25")
+plinks = c.execute("select link from plinks where id=23")
 rows = plinks.fetchall()
 for plink in rows:
     slink  = str(plink)
@@ -103,12 +104,22 @@ for plink in rows:
     while j<len(ldesc):
          desc = desc + ldesc[j]
          j= j+1
-    print 'description: ',desc
-    #oname
-    #rent = tree.xpath('//div[@id="detailpage_left_side"]/div[1]/ul/li[1]/text()')
-    #phone
-    #rent = tree.xpath('//div[@id="detailpage_left_side"]/div[1]/ul/li[1]/text()')
+    
+    oname = tree.xpath('//div[@class="detail_agent_companyname"]/span/text()')
+    print oname[0]
     #email
+    phone = tree.xpath('//div[@class="detail_agent_phone"]/span[1]/text()')
+    email = tree.xpath('//div[@class="detail_agent_emali"]/a/text()')
+    sphone = str(phone)
+    semail = str(email)
+    sphone = sphone.replace('[','')
+    sphone = sphone.replace(']','')
+    sphone = sphone.replace("'","",2)
+  
+    semail = semail.replace('[','')
+    semail = semail.replace(']','')
+    semail = semail.replace("'","",2)
+    print sphone,semail
     #rent = tree.xpath('//div[@id="detailpage_left_side"]/div[1]/ul/li[1]/text()')
     #print title[0]
     #print waddress
@@ -123,6 +134,6 @@ for plink in rows:
        print 'for rent: ',rentsale[0]
        if u'住宅' in house:
           print 'house:',house[0]
-          c.execute('insert into rentinfo ("title","address","rent","rstyle","method","rooms","length","intime","condition","equip","env","metro","desc") values (?,?,?,?,?,?,?,?,?,?,?,?,?)', (title[0],waddress,wrent,wstyle,wmethod,wrooms,wlength,wintime,wcondition,wequip,wenv,wmetro,desc)) 
+          c.execute('insert into rentinfo ("title","address","rent","rstyle","method","rooms","length","intime","condition","equip","env","metro","desc","oname","phone","email") values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', (title[0],waddress,wrent,wstyle,wmethod,wrooms,wlength,wintime,wcondition,wequip,wenv,wmetro,desc,oname[0],sphone,semail)) 
           conn.commit()  
 conn.close()
