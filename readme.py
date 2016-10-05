@@ -6,6 +6,8 @@ db_create.py
 
 savepages.py
     save html locally iu91.com/content/listRS?page=
+savejs.py
+    save javascripts locally on iu91.com/re/rent 
 
 plinks.py
     save links on iu91.com/content/listRS?page= to table plinks  montreal.sqlite
