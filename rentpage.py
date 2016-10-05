@@ -30,9 +30,11 @@ wcondition = ''
 wequip = ''
 wenv = ''
 wmetro = ''
+wtenant = ''
+wname = ''
 
 conn.text_factory = bytes
-plinks = c.execute("select link from plinks where id=23")
+plinks = c.execute("select link from plinks where id<3000")
 rows = plinks.fetchall()
 for plink in rows:
     slink  = str(plink)
@@ -89,6 +91,8 @@ for plink in rows:
            wlength =  " ".join(pp[1].split())
         if u'入住时间' in tt[0]:
            wintime =  " ".join(pp[1].split())
+        if u'出租对象' in tt[0]:
+           wtenant =  " ".join(pp[1].split())
         if u'使用条件' in tt[0]:
            wcondition =  " ".join(pp[1].split())
         if u'附属设施' in tt[0]:
@@ -106,7 +110,10 @@ for plink in rows:
          j= j+1
     
     oname = tree.xpath('//div[@class="detail_agent_companyname"]/span/text()')
-    print oname[0]
+    try:
+       wname = oname[0]
+    except IndexError:
+       wname = ''    
     #email
     phone = tree.xpath('//div[@class="detail_agent_phone"]/span[1]/text()')
     email = tree.xpath('//div[@class="detail_agent_emali"]/a/text()')
@@ -134,6 +141,6 @@ for plink in rows:
        print 'for rent: ',rentsale[0]
        if u'住宅' in house:
           print 'house:',house[0]
-          c.execute('insert into rentinfo ("title","address","rent","rstyle","method","rooms","length","intime","condition","equip","env","metro","desc","oname","phone","email") values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', (title[0],waddress,wrent,wstyle,wmethod,wrooms,wlength,wintime,wcondition,wequip,wenv,wmetro,desc,oname[0],sphone,semail)) 
+          c.execute('insert into rentpage ("title","address","rent","rstyle","method","rooms","length","intime","condition","equip","env","metro","desc","oname","phone","email","tenant") values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', (title[0],waddress,wrent,wstyle,wmethod,wrooms,wlength,wintime,wcondition,wequip,wenv,wmetro,desc,wname,sphone,semail,wtenant)) 
           conn.commit()  
 conn.close()
