@@ -17,20 +17,13 @@ elem.send_keys("QC")
 elem.send_keys(Keys.RETURN)
 #assert "No results found." not in driver.page_source
 
-driver.close()
+parser = html.fromstring(driver.page_source,driver.current_url)
 
-r = requests.get(murl)
-tree = html.fromstring(r.content)
-
-rlink = tree.xpath('//*[@id="listArea"]/ul/li[1]/div/div[2]/div[1]/span/a')
+#rlink = parser.xpath('//*[@id="listArea"]/ul/li[1]/div/div[2]/div[1]/span/a/text()')
+#print rlink[0]
+rlink = parser.xpath('//*[@id="listArea"]/ul/li[1]/div/div[2]/div[1]/span/a/@href')
 print rlink
-rdate = tree.xpath('//*[@id="listArea"]/ul/li[1]/div/div[2]/div[5]/text()')
-print rdate
-print tree.xpath('//title/text()')
-
-#link = driver.find_element_by_xpath("//*[@id='listArea']/ul/li[1]/div/div[2]/div[1]/span/a/text()")
-#print link
-
 
 #driver.find_element_by_xpath("//*[@id='listArea']/ul/li[1]/div/div[2]/div[1]/span/a").click()
 
+driver.close()
