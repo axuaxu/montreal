@@ -13,14 +13,26 @@ from lxml import html
 import sqlite3
 import re
 
+def xchar(instr)
+    pass
+
+def xnum(innum)
+    pass
+
 def setFields(udate,surl,sparser,c):
     num = surl.rsplit('/',1)[1]
     num = num.split('.',1)[0]
     title = sparser.xpath('//span[@class="detail_top_title_text"]/text()')[0]
+    atitle = " ".join(re.findall("[a-zA-Z]+", title[0]))
     tprice = sparser.xpath('//span[@class="detail_top_title_price"]/text()')
     wprice = " ".join(tprice[0].split())
     lprice = wprice.replace(',','')
     rprice = re.findall('\d+',lprice)
+    try:
+       aprice = rprice[0]    
+    except IndexError:
+            aprice = 0
+
     address = sparser.xpath('//div[@class="detailinfosubtitle"]/text()')
     waddress = " ".join(address[0].split())
     pcode = waddress[-7:]
@@ -62,12 +74,16 @@ def setFields(udate,surl,sparser,c):
            wenv =  " ".join(pp[1].split())
         if u'附近公车' in tt[0]:
            wbus =  " ".join(pp[1].split())
+           abus = xnum(wbus)
         if u'附近地铁' in tt[0]:
            wmetro =  " ".join(pp[1].split())
+           ametro = xchar(wmetro)
         if u'附近火车' in tt[0]:
            wtrain =  " ".join(pp[1].split())
+           atrain = xchar(wtrain) 
         if u'附近高速' in tt[0]:
            whway =  " ".join(pp[1].split())
+           ahway = xnum(whway)
         ldesc = sparser.xpath('//div[@id="summary"]/text()')
         k  = 0
         desc = ''
@@ -95,7 +111,7 @@ def setFields(udate,surl,sparser,c):
         semail = semail.replace("'","",2)
 
 
-    print rprice,pcode,num,title,wprice,waddress,wrent,wrooms,wintime,wname,sphone,wechat
+    print aprice,pcode,num,title,wprice,waddress,wrent,wrooms,wintime,wname,sphone,wechat
     #pass
 
 sqlite_file = "montreal.sqlite"
