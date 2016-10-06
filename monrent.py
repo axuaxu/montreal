@@ -51,13 +51,15 @@ base = 'http://www.iu91.com'
 second_driver = webdriver.Firefox()    
 second_driver.get(base+rlink[0])
 
+second_parser = html.fromstring(driver.page_source,driver.current_url)
+rlink = parser.xpath('//*[@id="listArea"]/ul/li[1]/div/div[2]/div[1]/span/a/@href')
 #window_after = driver.window_handles
 
 #driver.switch_to_window(window_after[0])
 time.sleep(15)
-
+second_driver.close()
 #driver.switch_to_window(window_before[0])
 
 #driver.find_element_by_xpath("//*[@id='listArea']/ul/li[2]/div/div[2]/div[1]/span/a").click()
 
-driver.close()
+#driver.close()
