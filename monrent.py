@@ -45,16 +45,19 @@ if m:
    udate = str(today+relativedelta(days=-int(m)))[:10]
 print udate
 
-window_before = driver.window_handles
-    
-driver.find_element_by_xpath("//*[@id='listArea']/ul/li[1]/div/div[2]/div[1]/span/a").click()
-window_after = driver.window_handles
+#driver.find_element_by_xpath("//*[@id='listArea']/ul/li[1]/div/div[2]/div[1]/span/a").click()
+
+base = 'http://www.iu91.com'
+second_driver = webdriver.Firefox()    
+second_driver.get(base+rlink[0])
+
+#window_after = driver.window_handles
 
 #driver.switch_to_window(window_after[0])
 time.sleep(15)
 
-driver.switch_to_window(window_before[0])
+#driver.switch_to_window(window_before[0])
 
-driver.find_element_by_xpath("//*[@id='listArea']/ul/li[2]/div/div[2]/div[1]/span/a").click()
+#driver.find_element_by_xpath("//*[@id='listArea']/ul/li[2]/div/div[2]/div[1]/span/a").click()
 
 driver.close()
