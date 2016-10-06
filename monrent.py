@@ -16,9 +16,86 @@ import re
 def setFields(udate,surl,sparser,c):
     num = surl.rsplit('/',1)[1]
     num = num.split('.',1)[0]
-    print num       
     title = sparser.xpath('//span[@class="detail_top_title_text"]/text()')[0]
-    print num,title
+    tprice = sparser.xpath('//span[@class="detail_top_title_price"]/text()')
+    wprice = " ".join(tprice[0].split())
+    lprice = wprice.replace(',','')
+    rprice = re.findall('\d+',lprice)
+    address = sparser.xpath('//div[@class="detailinfosubtitle"]/text()')
+    waddress = " ".join(address[0].split())
+    pcode = waddress[-7:]
+    for item in sparser.xpath('//div[@id="detailpage_left_side"]/div[1]/ul/li'):
+        tt = item.xpath('./span/text()')
+        if not tt:
+           print 'empty list'
+           continue
+        pp = item.xpath('./text()')
+        #print pp[1] 
+        try:
+            detail = " ".join((tt[0]+pp[1]).split())
+            #print detail
+        except IndexError:
+            continue
+        if u'每月租金' in tt[0]:
+           wrent =  " ".join(pp[1].split())
+        if u'房屋类型' in tt[0]:
+           wstyle =  " ".join(pp[1].split())
+        if u'出租方式' in tt[0]:
+           wmethod =  " ".join(pp[1].split())
+        if u'周边信息' in tt[0]:
+           wcircle =  " ".join(pp[1].split())
+        if u'出租房间' in tt[0]:
+           wrooms =  " ".join(pp[1].split())
+        if u'租约长短' in tt[0]:
+           wlength =  " ".join(pp[1].split())
+        if u'入住时间' in tt[0]:
+           wintime =  " ".join(pp[1].split())
+        if u'出租对象' in tt[0]:
+           wtenant =  " ".join(pp[1].split())
+        if u'使用条件' in tt[0]:
+           wcondition =  " ".join(pp[1].split())
+        if u'房客要求' in tt[0]:
+           wtreq =  " ".join(pp[1].split())
+        if u'附属设施' in tt[0]:
+           wequip =  " ".join(pp[1].split())
+        if u'周边环境' in tt[0]:
+           wenv =  " ".join(pp[1].split())
+        if u'附近公车' in tt[0]:
+           wbus =  " ".join(pp[1].split())
+        if u'附近地铁' in tt[0]:
+           wmetro =  " ".join(pp[1].split())
+        if u'附近火车' in tt[0]:
+           wtrain =  " ".join(pp[1].split())
+        if u'附近高速' in tt[0]:
+           whway =  " ".join(pp[1].split())
+        ldesc = sparser.xpath('//div[@id="summary"]/text()')
+        k  = 0
+        desc = ''
+        while k<len(ldesc):
+            desc = desc + ldesc[k]
+            k = k+1
+
+        oname = sparser.xpath('//div[@class="detail_agent_companyname"]/span/text()')
+        try:
+            wname = oname[0]
+        except IndexError:
+            wname = ''
+        phone = sparser.xpath('//div[@class="detail_agent_phone"]/span[1]/text()')
+        email = sparser.xpath('//div[@class="detail_agent_emali"]/a/text()')
+        wechat = sparser.xpath('//div[@class="detail_agent_wechat"]/a/text()')
+        qq = sparser.xpath('//div[@class="detail_agent_qq"]/a/text()')
+        sphone = str(phone)
+        semail = str(email)
+        sphone = sphone.replace('[','')
+        sphone = sphone.replace(']','')
+        sphone = sphone.replace("'","",2)
+
+        semail = semail.replace('[','')
+        semail = semail.replace(']','')
+        semail = semail.replace("'","",2)
+
+
+    print rprice,pcode,num,title,wprice,waddress,wrent,wrooms,wintime,wname,sphone,wechat
     #pass
 
 sqlite_file = "montreal.sqlite"
@@ -43,9 +120,9 @@ today = datetime.now()
 udate = ''
 base = 'http://www.iu91.com'
 
-for i in range(3,4):
+for i in range(1,2):
     
-    for j in range(15,16):
+    for j in range(7,9):
         xlink = '//*[@id="listArea"]/ul/li['+str(j)+']/div/div[2]/div[1]/span/a/@href'
         rlink = parser.xpath(xlink)
         print j,rlink[0]
