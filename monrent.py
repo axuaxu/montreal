@@ -2,6 +2,7 @@
 from datetime import datetime
 from dateutil.parser import parse
 from dateutil.relativedelta import *
+import time
 
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
@@ -43,7 +44,17 @@ m = re.search("\d",utime[0])
 if m:
    udate = str(today+relativedelta(days=-int(m)))[:10]
 print udate
-     
-res =driver.find_element_by_xpath("//*[@id='listArea']/ul/li[1]/div/div[2]/div[1]/span/a").click()
+
+window_before = driver.window_handles
+    
+driver.find_element_by_xpath("//*[@id='listArea']/ul/li[1]/div/div[2]/div[1]/span/a").click()
+window_after = driver.window_handles
+
+#driver.switch_to_window(window_after[0])
+time.sleep(15)
+
+driver.switch_to_window(window_before[0])
+
+driver.find_element_by_xpath("//*[@id='listArea']/ul/li[2]/div/div[2]/div[1]/span/a").click()
 
 driver.close()
