@@ -43,6 +43,29 @@ def setFields(udate,surl,sparser,c):
     address = sparser.xpath('//div[@class="detailinfosubtitle"]/text()')
     waddress = " ".join(address[0].split())
     pcode = waddress[-7:]
+    
+    wrent = '' 
+    wlength = ''
+    wtenant = ''
+    abus = ''
+    ametro = ''
+    atrain = ''
+    ahway = ''
+    wtreq = ''
+    wcondition = ''
+    wequip = ''
+    wenv = ''
+    wbus = ''
+    wmetro = ''
+    wtrain = ''
+    whway = ''
+    wname = ''
+    sphone = ''
+    sphone2 = ''
+    semail = ''
+    swechat = ''
+    sqq = ''
+        
     for item in sparser.xpath('//div[@id="detailpage_left_side"]/div[1]/ul/li'):
         tt = item.xpath('./span/text()')
         if not tt:
@@ -82,7 +105,6 @@ def setFields(udate,surl,sparser,c):
         if u'附近公车' in tt[0]:
            wbus =  " ".join(pp[1].split())
            abus = xnum(wbus)
-        ametro = ''
         if u'附近地铁' in tt[0]:
            wmetro =  " ".join(pp[1].split())
            ametro = xchar(wmetro)
@@ -109,6 +131,7 @@ def setFields(udate,surl,sparser,c):
         wechat = sparser.xpath('//div[@class="detail_agent_wechat"]/a/text()')
         qq = sparser.xpath('//div[@class="detail_agent_qq"]/a/text()')
         sphone = ''.join(phone)
+        sphone2 = ''
         semail = ''.join(email)
         swechat = ''.join(wechat)
         sqq = ''.join(qq)
@@ -124,6 +147,14 @@ def setFields(udate,surl,sparser,c):
 
 
     print aprice,pcode,num,title,wprice,atitle,ametro,abus,waddress,wrent,wrooms,wintime,wname,sphone,wechat
+    
+    sinsert1 = 'insert into monrent( "num", "udate", "surl","title", "address", "pcode","rent", "rstyle", "method", "rooms", "length", "intime", "desc", "tenant", "treq", "condition", "equip", "env", "bus", "metro","train", "hway", "oname", "phone",  "phone2", "email","wechat","qq" ,"aprice","atitle","abus","ametro","atrain","ahway" )'
+    sinsert2 = 'values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)'
+    sinsert = sinsert1+sinsert2
+    svalues = 'num, udate, surl,title, waddress,pcode, wrent, wstyle, wmethod, wrooms, wlength,wintime, desc, wtenant, wtreq, wcondition, wequip, wenv, wbus, wmetro,wtrain, whway, wname, sphone,  sphone2, semail,swechat,sqq ,aprice,atitle,abus,ametro,atrain,ahway,'
+    c.execute(sinsert,(num, udate, surl,title, waddress,pcode, wrent, wstyle, wmethod, wrooms, wlength,wintime, desc, wtenant, wtreq, wcondition, wequip, wenv, wbus, wmetro,wtrain, whway, wname, sphone,  sphone2, semail,swechat,sqq ,aprice,atitle,abus,ametro,atrain,ahway,))
+    
+
     #pass
 
 sqlite_file = "montreal.sqlite"
@@ -148,9 +179,14 @@ today = datetime.now()
 udate = ''
 base = 'http://www.iu91.com'
 
-for i in range(1,2):
+for i in range(1,3):
     
-    for j in range(7,9):
+    for j in range(12,15):
+        xtype = '//*[@id="listArea"]/ul/li['+str(j)+']/div/div[2]/div[3]/text()'
+        rtype = parser.xpath(xtype)
+        if u'客栈' in rtype[0]:
+            print 'short term hotel',rtype[0]
+            continue
         xlink = '//*[@id="listArea"]/ul/li['+str(j)+']/div/div[2]/div[1]/span/a/@href'
         rlink = parser.xpath(xlink)
         print j,rlink[0]
@@ -175,14 +211,14 @@ for i in range(1,2):
         second_parser = html.fromstring(second_driver.page_source,second_driver.current_url)
         
         setFields(udate,surl,second_parser,c)
-  
+        conn.commit() 
         second_driver.close()
  
     time.sleep(10)
     #.//*[@id='pagination']/a[4]
-    xpage = '//*[@id="pagination"]/a['+str(i+2)+']/@href'
-    rpage = parser.xpath(xpage)
-    print i,'next page',rpage[0]    
+    #xpage = '//*[@id="pagination"]/a['+str(i+2)+']/@href'
+    #rpage = parser.xpath(xpage)
+    #print i,'next page',rpage[0]    
    
     #driver.get(base+rpage[0])
 
@@ -191,5 +227,5 @@ for i in range(1,2):
     time.sleep(10)
     parser = html.fromstring(driver.page_source,driver.current_url)
 driver.close()
-conn.commit()
+#conn.commit()
 conn.close()
