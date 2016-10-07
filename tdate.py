@@ -2,7 +2,7 @@
 from datetime import datetime
 from dateutil.parser import parse
 from dateutil.relativedelta import *
-
+import re
 
 a = u'当天'
 print a
@@ -27,3 +27,15 @@ today =  datetime.now()
 print today
 print today+relativedelta(days=-1)
 
+
+#a='adff 1231 123123kjjksd asdfasd 12123'
+
+#a = 'sfa afakj sdfakjf'
+
+a = '234 234 090'
+word1 = " ".join(re.findall("[a-zA-Z]+", a))
+sw = ''.join(word1)
+num1 = " ".join(re.findall("\d+", a))
+sn = ''.join(num1)
+print a,word1,num1
+print sw,sn

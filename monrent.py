@@ -13,25 +13,32 @@ from lxml import html
 import sqlite3
 import re
 
-def xchar(instr)
-    pass
+def xchar(instr):
+    tstr = " ".join(re.findall("[a-zA-Z]+", instr))
+    outstr = ''.join(tstr)
+    return outstr
 
-def xnum(innum)
-    pass
+def xnum(innum):
+    tnum = " ".join(re.findall("\d+", innum))
+    outnum = ''.join(tnum)
+    return outnum
+
 
 def setFields(udate,surl,sparser,c):
     num = surl.rsplit('/',1)[1]
     num = num.split('.',1)[0]
     title = sparser.xpath('//span[@class="detail_top_title_text"]/text()')[0]
-    atitle = " ".join(re.findall("[a-zA-Z]+", title[0]))
+    #atitle = " ".join(re.findall("[a-zA-Z]+", title[0]))
+    atitle = xchar(title)
     tprice = sparser.xpath('//span[@class="detail_top_title_price"]/text()')
     wprice = " ".join(tprice[0].split())
     lprice = wprice.replace(',','')
-    rprice = re.findall('\d+',lprice)
-    try:
-       aprice = rprice[0]    
-    except IndexError:
-            aprice = 0
+    aprice = xnum(lprice)
+    #rprice = re.findall('\d+',lprice)
+    #try:
+    #   aprice = rprice[0]    
+    #except IndexError:
+    #        aprice = 0
 
     address = sparser.xpath('//div[@class="detailinfosubtitle"]/text()')
     waddress = " ".join(address[0].split())
@@ -75,6 +82,7 @@ def setFields(udate,surl,sparser,c):
         if u'附近公车' in tt[0]:
            wbus =  " ".join(pp[1].split())
            abus = xnum(wbus)
+        ametro = ''
         if u'附近地铁' in tt[0]:
            wmetro =  " ".join(pp[1].split())
            ametro = xchar(wmetro)
@@ -100,18 +108,22 @@ def setFields(udate,surl,sparser,c):
         email = sparser.xpath('//div[@class="detail_agent_emali"]/a/text()')
         wechat = sparser.xpath('//div[@class="detail_agent_wechat"]/a/text()')
         qq = sparser.xpath('//div[@class="detail_agent_qq"]/a/text()')
-        sphone = str(phone)
-        semail = str(email)
-        sphone = sphone.replace('[','')
-        sphone = sphone.replace(']','')
-        sphone = sphone.replace("'","",2)
+        sphone = ''.join(phone)
+        semail = ''.join(email)
+        swechat = ''.join(wechat)
+        sqq = ''.join(qq)
+        #sphone = str(phone)
+        #semail = str(email)
+        #sphone = sphone.replace('[','')
+        #sphone = sphone.replace(']','')
+        #sphone = sphone.replace("'","",2)
 
-        semail = semail.replace('[','')
-        semail = semail.replace(']','')
-        semail = semail.replace("'","",2)
+        #semail = semail.replace('[','')
+        #semail = semail.replace(']','')
+        #semail = semail.replace("'","",2)
 
 
-    print aprice,pcode,num,title,wprice,waddress,wrent,wrooms,wintime,wname,sphone,wechat
+    print aprice,pcode,num,title,wprice,atitle,ametro,abus,waddress,wrent,wrooms,wintime,wname,sphone,wechat
     #pass
 
 sqlite_file = "montreal.sqlite"
