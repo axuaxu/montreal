@@ -188,7 +188,10 @@ for i in range(1,20):
         if u'客栈' in rtype[0]:
             print 'short term hotel',rtype[0]
             continue
-         if u'车位' in rtype[0]:
+        if u'车位' in rtype[0]:
+            print 'parking lot',rtype[0]
+            continue
+        if u'办公室' in rtype[0]:
             print 'parking lot',rtype[0]
             continue
 
