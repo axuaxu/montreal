@@ -48,6 +48,7 @@ def setFields(udate,surl,area,sparser,c):
     wrent = '' 
     wlength = ''
     wtenant = ''
+    wrooms = ''
     abus = ''
     ametro = ''
     atrain = ''
@@ -215,11 +216,16 @@ for i in range(1,20):
 
         #.//*[@id='listArea']/ul/li[10]/div/div[2]/div[4]/a[1]
         #for area in parser.xpath('//*[@id="listArea"]/ul/li[10]/div/div[2]/div[4]/a[1]')
-        ai = 0
-        for aitem in parser.xpath('//*[@id="listArea"]/ul/li[10]/div/div[2]/div[4]'):
-            ai = ai+1
-            area[ai]=(aitem.xpath('./a['+str(ai)+']/text()'))
-            #area[ai] = parser.xpath(arlink)   
+        #for aitem in parser.xpath('//*[@id="listArea"]/ul/li[10]/div/div[2]/div[4]'):
+        #    area[ai-1]=(aitem.xpath('./a['+str(ai)+']/text()'))[0]
+        #    ai = ai+1
+        
+        area[0] = parser.xpath('//*[@id="listArea"]/ul/li[15]/div/div[2]/div[4]/a[1]/text()')
+        area[1] = parser.xpath('//*[@id="listArea"]/ul/li[15]/div/div[2]/div[4]/a[2]/text()')
+        try :
+            area[2] = parser.xpath('//*[@id="listArea"]/ul/li[15]/div/div[2]/div[4]/a[3]/text()')
+        except IndexError:
+            area[3] = ''
         print area
         second_driver = webdriver.Firefox()
         surl = base+rlink[0]    
