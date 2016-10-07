@@ -220,12 +220,12 @@ for i in range(1,20):
         #    area[ai-1]=(aitem.xpath('./a['+str(ai)+']/text()'))[0]
         #    ai = ai+1
         
-        area[0] = parser.xpath('//*[@id="listArea"]/ul/li[15]/div/div[2]/div[4]/a[1]/text()')
-        area[1] = parser.xpath('//*[@id="listArea"]/ul/li[15]/div/div[2]/div[4]/a[2]/text()')
+        area[0] = parser.xpath('//*[@id="listArea"]/ul/li[15]/div/div[2]/div[4]/a[1]/text()')[0]
+        area[1] = parser.xpath('//*[@id="listArea"]/ul/li[15]/div/div[2]/div[4]/a[2]/text()')[0]
         try :
-            area[2] = parser.xpath('//*[@id="listArea"]/ul/li[15]/div/div[2]/div[4]/a[3]/text()')
+            area[2] = parser.xpath('//*[@id="listArea"]/ul/li[15]/div/div[2]/div[4]/a[3]/text()')[0]
         except IndexError:
-            area[3] = ''
+            area[2] = ''
         print area
         second_driver = webdriver.Firefox()
         surl = base+rlink[0]    
