@@ -25,7 +25,7 @@ def xnum(innum):
     return outnum
 
 
-def setFields(udate,surl,area,sparser,c):
+def setFields(udate,surl,area,sparser,c,conn):
     num = surl.rsplit('/',1)[1]
     num = num.split('.',1)[0]
     title = sparser.xpath('//span[@class="detail_top_title_text"]/text()')[0]
@@ -155,7 +155,7 @@ def setFields(udate,surl,area,sparser,c):
     sinsert = sinsert1+sinsert2
     svalues = 'num, udate, surl,title, waddress,pcode, wrent, wstyle, wmethod, wrooms, wlength,wintime, desc, wtenant, wtreq, wcondition, wequip, wenv, wbus, wmetro,wtrain, whway, wname, sphone,  sphone2, semail,swechat,sqq ,aprice,atitle,abus,ametro,atrain,ahway,'
     c.execute(sinsert,(num, udate, surl,title, waddress,pcode, wrent, wstyle, wmethod, wrooms, wlength,wintime, desc, wtenant, wtreq, wcondition, wequip, wenv, wbus, wmetro,wtrain, whway, wname, sphone,  sphone2, semail,swechat,sqq ,aprice,atitle,abus,ametro,atrain,ahway,area[0],area[1],area[2]))
-    
+    conn.commit()
 
     #pass
 
@@ -205,13 +205,21 @@ for i in range(1,20):
         print utime[0]
         if u'当天更新' in utime[0]:
            udate = str(today)[:10]
-        if u'昨天更新' in utime[0]:
-           udate = str(today+relativedelta(days=-1))[:10]
-        if u'前天更新' in utime[0]:
-           udate = str(today+relativedelta(days=-2))[:10]
-        m = re.search("\d",utime[0])
-        if m:
-           udate = str(today+relativedelta(days=-int(m)))[:10]
+        else:
+            if u'昨天更新' in utime[0]:
+               udate = str(today+relativedelta(days=-1))[:10]
+            else:
+               if u'前天更新' in utime[0]:
+                  udate = str(today+relativedelta(days=-2))[:10]
+               else:
+                   try:
+                      found = re.findall('\d+',utime[0])
+                      ff = int(found[0])
+                   except AttributeError:
+                      ff = 0
+                   #m = re.search("\d+",utime[0])
+                   #if m:
+                   udate = str(today+relativedelta(days=-ff))[:10]
         print udate
 
         #.//*[@id='listArea']/ul/li[10]/div/div[2]/div[4]/a[1]
@@ -233,8 +241,8 @@ for i in range(1,20):
 
         second_parser = html.fromstring(second_driver.page_source,second_driver.current_url)
         
-        setFields(udate,surl,area,second_parser,c)
-        conn.commit() 
+        setFields(udate,surl,area,second_parser,c,conn)
+         
         second_driver.close()
     sp = randint(9,17)
     time.sleep(sp)
