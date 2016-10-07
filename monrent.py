@@ -12,6 +12,7 @@ import codecs
 from lxml import html
 import sqlite3
 import re
+from random import randint
 
 def xchar(instr):
     tstr = " ".join(re.findall("[a-zA-Z]+", instr))
@@ -213,8 +214,8 @@ for i in range(1,3):
         setFields(udate,surl,second_parser,c)
         conn.commit() 
         second_driver.close()
- 
-    time.sleep(10)
+    sp = randint(9,17)
+    time.sleep(sp)
     #.//*[@id='pagination']/a[4]
     #xpage = '//*[@id="pagination"]/a['+str(i+2)+']/@href'
     #rpage = parser.xpath(xpage)
@@ -224,7 +225,8 @@ for i in range(1,3):
 
     #elem = driver.find_element_by_class("nextPage")
     driver.find_element_by_xpath(".//*[@id='pagination']/a[16]").click()
-    time.sleep(10)
+    sp = randint(8,16)
+    time.sleep(sp)
     parser = html.fromstring(driver.page_source,driver.current_url)
 driver.close()
 #conn.commit()
