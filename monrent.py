@@ -180,14 +180,18 @@ today = datetime.now()
 udate = ''
 base = 'http://www.iu91.com'
 
-for i in range(1,3):
+for i in range(1,20):
     
-    for j in range(12,15):
+    for j in range(1,30):
         xtype = '//*[@id="listArea"]/ul/li['+str(j)+']/div/div[2]/div[3]/text()'
         rtype = parser.xpath(xtype)
         if u'客栈' in rtype[0]:
             print 'short term hotel',rtype[0]
             continue
+         if u'车位' in rtype[0]:
+            print 'parking lot',rtype[0]
+            continue
+
         xlink = '//*[@id="listArea"]/ul/li['+str(j)+']/div/div[2]/div[1]/span/a/@href'
         rlink = parser.xpath(xlink)
         print j,rlink[0]
