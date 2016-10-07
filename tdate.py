@@ -39,3 +39,10 @@ num1 = " ".join(re.findall("\d+", a))
 sn = ''.join(num1)
 print a,word1,num1
 print sw,sn
+
+for i in range(1,4):
+    print i
+#s = 'good bad in out day light sun moon flower'
+s='this that'
+if ('good' in s) or ('bad' in s):
+   print 'continue' 

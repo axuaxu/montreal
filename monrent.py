@@ -25,7 +25,7 @@ def xnum(innum):
     return outnum
 
 
-def setFields(udate,surl,sparser,c):
+def setFields(udate,surl,area,sparser,c):
     num = surl.rsplit('/',1)[1]
     num = num.split('.',1)[0]
     title = sparser.xpath('//span[@class="detail_top_title_text"]/text()')[0]
@@ -149,11 +149,11 @@ def setFields(udate,surl,sparser,c):
 
     print aprice,pcode,num,title,wprice,atitle,ametro,abus,waddress,wrent,wrooms,wintime,wname,sphone,wechat
     
-    sinsert1 = 'insert into monrent( "num", "udate", "surl","title", "address", "pcode","rent", "rstyle", "method", "rooms", "length", "intime", "desc", "tenant", "treq", "condition", "equip", "env", "bus", "metro","train", "hway", "oname", "phone",  "phone2", "email","wechat","qq" ,"aprice","atitle","abus","ametro","atrain","ahway" )'
-    sinsert2 = 'values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)'
+    sinsert1 = 'insert into monrent( "num", "udate", "surl","title", "address", "pcode","rent", "rstyle", "method", "rooms", "length", "intime", "desc", "tenant", "treq", "condition", "equip", "env", "bus", "metro","train", "hway", "oname", "phone",  "phone2", "email","wechat","qq" ,"aprice","atitle","abus","ametro","atrain","ahway","area1","area2","area3" )'
+    sinsert2 = 'values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)'
     sinsert = sinsert1+sinsert2
     svalues = 'num, udate, surl,title, waddress,pcode, wrent, wstyle, wmethod, wrooms, wlength,wintime, desc, wtenant, wtreq, wcondition, wequip, wenv, wbus, wmetro,wtrain, whway, wname, sphone,  sphone2, semail,swechat,sqq ,aprice,atitle,abus,ametro,atrain,ahway,'
-    c.execute(sinsert,(num, udate, surl,title, waddress,pcode, wrent, wstyle, wmethod, wrooms, wlength,wintime, desc, wtenant, wtreq, wcondition, wequip, wenv, wbus, wmetro,wtrain, whway, wname, sphone,  sphone2, semail,swechat,sqq ,aprice,atitle,abus,ametro,atrain,ahway,))
+    c.execute(sinsert,(num, udate, surl,title, waddress,pcode, wrent, wstyle, wmethod, wrooms, wlength,wintime, desc, wtenant, wtreq, wcondition, wequip, wenv, wbus, wmetro,wtrain, whway, wname, sphone,  sphone2, semail,swechat,sqq ,aprice,atitle,abus,ametro,atrain,ahway,area[1],area[2],area[3]))
     
 
     #pass
@@ -182,18 +182,18 @@ base = 'http://www.iu91.com'
 
 for i in range(1,20):
     
-    for j in range(1,30):
+    for j in range(1,31):
         xtype = '//*[@id="listArea"]/ul/li['+str(j)+']/div/div[2]/div[3]/text()'
         rtype = parser.xpath(xtype)
-        if u'客栈' in rtype[0]:
+        if (u'客栈' in rtype[0]) or (u'车位' in rtype[0]) or (u'办公室' in rtype[0]) or (u'店面' in rtype[0]) or (u'厂房' in rtype[0]) or (u'仓库' in rtype[0]) or (u'土地' in rtype[0]):
             print 'short term hotel',rtype[0]
             continue
-        if u'车位' in rtype[0]:
-            print 'parking lot',rtype[0]
-            continue
-        if u'办公室' in rtype[0]:
-            print 'parking lot',rtype[0]
-            continue
+        #if u'车位' in rtype[0]:
+        #    print 'parking lot',rtype[0]
+        #    continue
+        #if u'办公室' in rtype[0]:
+        #    print 'parking lot',rtype[0]
+        #    continue
 
         xlink = '//*[@id="listArea"]/ul/li['+str(j)+']/div/div[2]/div[1]/span/a/@href'
         rlink = parser.xpath(xlink)
@@ -212,13 +212,19 @@ for i in range(1,20):
            udate = str(today+relativedelta(days=-int(m)))[:10]
         print udate
 
+        #.//*[@id='listArea']/ul/li[10]/div/div[2]/div[4]/a[1]
+        #for area in parser.xpath('//*[@id="listArea"]/ul/li[10]/div/div[2]/div[4]/a[1]')
+        for ai in range(1,4):
+            arlink = parser.xpath('//*[@id="listArea"]/ul/li[10]/div/div[2]/div[4]/a['+str(ai)+']/text()')
+            area[ai] = parser.xpath(arlink)   
+            print area[ai]
         second_driver = webdriver.Firefox()
         surl = base+rlink[0]    
         second_driver.get(surl)
 
         second_parser = html.fromstring(second_driver.page_source,second_driver.current_url)
         
-        setFields(udate,surl,second_parser,c)
+        setFields(udate,surl,area,second_parser,c)
         conn.commit() 
         second_driver.close()
     sp = randint(9,17)
