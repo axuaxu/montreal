@@ -46,3 +46,7 @@ for i in range(1,4):
 s='this that'
 if ('good' in s) or ('bad' in s):
    print 'continue' 
+
+area=['dd','b']
+print  'alen',len(area)
+

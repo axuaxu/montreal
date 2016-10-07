@@ -153,7 +153,7 @@ def setFields(udate,surl,area,sparser,c):
     sinsert2 = 'values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)'
     sinsert = sinsert1+sinsert2
     svalues = 'num, udate, surl,title, waddress,pcode, wrent, wstyle, wmethod, wrooms, wlength,wintime, desc, wtenant, wtreq, wcondition, wequip, wenv, wbus, wmetro,wtrain, whway, wname, sphone,  sphone2, semail,swechat,sqq ,aprice,atitle,abus,ametro,atrain,ahway,'
-    c.execute(sinsert,(num, udate, surl,title, waddress,pcode, wrent, wstyle, wmethod, wrooms, wlength,wintime, desc, wtenant, wtreq, wcondition, wequip, wenv, wbus, wmetro,wtrain, whway, wname, sphone,  sphone2, semail,swechat,sqq ,aprice,atitle,abus,ametro,atrain,ahway,area[1],area[2],area[3]))
+    c.execute(sinsert,(num, udate, surl,title, waddress,pcode, wrent, wstyle, wmethod, wrooms, wlength,wintime, desc, wtenant, wtreq, wcondition, wequip, wenv, wbus, wmetro,wtrain, whway, wname, sphone,  sphone2, semail,swechat,sqq ,aprice,atitle,abus,ametro,atrain,ahway,area[0],area[1],area[2]))
     
 
     #pass
@@ -179,6 +179,7 @@ parser = html.fromstring(driver.page_source,driver.current_url)
 today = datetime.now()
 udate = ''
 base = 'http://www.iu91.com'
+area = ['','','']
 
 for i in range(1,20):
     
@@ -214,10 +215,12 @@ for i in range(1,20):
 
         #.//*[@id='listArea']/ul/li[10]/div/div[2]/div[4]/a[1]
         #for area in parser.xpath('//*[@id="listArea"]/ul/li[10]/div/div[2]/div[4]/a[1]')
-        for ai in range(1,4):
-            arlink = parser.xpath('//*[@id="listArea"]/ul/li[10]/div/div[2]/div[4]/a['+str(ai)+']/text()')
-            area[ai] = parser.xpath(arlink)   
-            print area[ai]
+        ai = 0
+        for aitem in parser.xpath('//*[@id="listArea"]/ul/li[10]/div/div[2]/div[4]'):
+            ai = ai+1
+            area[ai]=(aitem.xpath('./a['+str(ai)+']/text()'))
+            #area[ai] = parser.xpath(arlink)   
+        print area
         second_driver = webdriver.Firefox()
         surl = base+rlink[0]    
         second_driver.get(surl)
