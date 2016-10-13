@@ -154,8 +154,23 @@ def setFields(udate,surl,area,sparser,c,conn):
     sinsert2 = 'values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)'
     sinsert = sinsert1+sinsert2
     svalues = 'num, udate, surl,title, waddress,pcode, wrent, wstyle, wmethod, wrooms, wlength,wintime, desc, wtenant, wtreq, wcondition, wequip, wenv, wbus, wmetro,wtrain, whway, wname, sphone,  sphone2, semail,swechat,sqq ,aprice,atitle,abus,ametro,atrain,ahway,'
-    c.execute(sinsert,(num, udate, surl,title, waddress,pcode, wrent, wstyle, wmethod, wrooms, wlength,wintime, desc, wtenant, wtreq, wcondition, wequip, wenv, wbus, wmetro,wtrain, whway, wname, sphone,  sphone2, semail,swechat,sqq ,aprice,atitle,abus,ametro,atrain,ahway,area[0],area[1],area[2]))
-    conn.commit()
+
+    supdate1 = 'update monrent set udate =? , surl =? ,title =? , address =? , pcode =? ,rent =? , rstyle =? , method =? , rooms =? , length =? , intime =? , desc =? , tenant =? , treq =? , condition =? , equip =? , env =? , bus =? , metro =? ,train =? , hway =? , oname =? , phone =? ,  phone2 =? , email =? ,wechat =? ,qq  =? ,aprice =? ,atitle =? ,abus =? ,ametro =? ,atrain =? ,ahway =? ,area1 =? ,area2 =? ,area3 =? '
+    supdate2 = 'values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)'
+    supdate = supdate1+supdate2
+    supdatevalues = 'num, udate, surl,title, waddress,pcode, wrent, wstyle, wmethod, wrooms, wlength,wintime, desc, wtenant, wtreq, wcondition, wequip, wenv, wbus, wmetro,wtrain, whway, wname, sphone,  sphone2, semail,swechat,sqq ,aprice,atitle,abus,ametro,atrain,ahway,'
+
+
+    c.execute("SELECT EXISTS(SELECT 1 FROM monrent  WHERE num= %s)" % num)
+    if c.fetchone():
+       print("Found!")
+       rowexist = 1
+    else:
+       rowexist=0
+       print("Not found...")
+    if rowexist =0 :
+         c.execute(sinsert,(num, udate, surl,title, waddress,pcode, wrent, wstyle, wmethod, wrooms, wlength,wintime, desc, wtenant, wtreq, wcondition, wequip, wenv, wbus, wmetro,wtrain, whway, wname, sphone,  sphone2, semail,swechat,sqq ,aprice,atitle,abus,ametro,atrain,ahway,area[0],area[1],area[2]))
+         conn.commit()
 
     #pass
 
