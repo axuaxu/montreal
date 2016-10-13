@@ -150,7 +150,7 @@ def setFields(udate,surl,area,sparser,c,conn):
 
     print aprice,pcode,num,title,wprice,atitle,ametro,abus,waddress,wrent,wrooms,wintime,wname,sphone,wechat
     
-    sinsert1 = 'insert into monrent( "num", "udate", "surl","title", "address", "pcode","rent", "rstyle", "method", "rooms", "length", "intime", "desc", "tenant", "treq", "condition", "equip", "env", "bus", "metro","train", "hway", "oname", "phone",  "phone2", "email","wechat","qq" ,"aprice","atitle","abus","ametro","atrain","ahway","area1","area2","area3" )'
+    sinsert1 = 'insert or ignore into monrent( "num", "udate", "surl","title", "address", "pcode","rent", "rstyle", "method", "rooms", "length", "intime", "desc", "tenant", "treq", "condition", "equip", "env", "bus", "metro","train", "hway", "oname", "phone",  "phone2", "email","wechat","qq" ,"aprice","atitle","abus","ametro","atrain","ahway","area1","area2","area3" )'
     sinsert2 = 'values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)'
     sinsert = sinsert1+sinsert2
     svalues = 'num, udate, surl,title, waddress,pcode, wrent, wstyle, wmethod, wrooms, wlength,wintime, desc, wtenant, wtreq, wcondition, wequip, wenv, wbus, wmetro,wtrain, whway, wname, sphone,  sphone2, semail,swechat,sqq ,aprice,atitle,abus,ametro,atrain,ahway,'
@@ -161,16 +161,16 @@ def setFields(udate,surl,area,sparser,c,conn):
     supdatevalues = 'num, udate, surl,title, waddress,pcode, wrent, wstyle, wmethod, wrooms, wlength,wintime, desc, wtenant, wtreq, wcondition, wequip, wenv, wbus, wmetro,wtrain, whway, wname, sphone,  sphone2, semail,swechat,sqq ,aprice,atitle,abus,ametro,atrain,ahway,'
 
 
-    c.execute("SELECT EXISTS(SELECT 1 FROM monrent  WHERE num= %s)" % num)
-    if c.fetchone():
-       print("Found!")
-       rowexist = 1
-    else:
-       rowexist=0
-       print("Not found...")
-    if rowexist =0 :
-         c.execute(sinsert,(num, udate, surl,title, waddress,pcode, wrent, wstyle, wmethod, wrooms, wlength,wintime, desc, wtenant, wtreq, wcondition, wequip, wenv, wbus, wmetro,wtrain, whway, wname, sphone,  sphone2, semail,swechat,sqq ,aprice,atitle,abus,ametro,atrain,ahway,area[0],area[1],area[2]))
-         conn.commit()
+    #c.execute("SELECT EXISTS(SELECT 1 FROM monrent  WHERE num= %s)" % num)
+    #if c.fetchone():
+    #   print("Found!")
+    #   rowexist = 1
+    #else:
+    #   rowexist=0
+    #   print("Not found...")
+    #if (rowexist ==0) :
+    c.execute(sinsert,(num, udate, surl,title, waddress,pcode, wrent, wstyle, wmethod, wrooms, wlength,wintime, desc, wtenant, wtreq, wcondition, wequip, wenv, wbus, wmetro,wtrain, whway, wname, sphone,  sphone2, semail,swechat,sqq ,aprice,atitle,abus,ametro,atrain,ahway,area[0],area[1],area[2]))
+    conn.commit()
 
     #pass
 
@@ -182,6 +182,9 @@ c = conn.cursor()
 murl = 'http://www.iu91.com/rs/rent'
 
 driver = webdriver.Firefox()
+driver.set_window_position(1200,0)
+driver.set_window_size(100,500)
+#driver.manage().window().setPosition(new Point(100,00))
 driver.get(murl)
 #assert "Python" in driver.title
 elem = driver.find_element_by_class_name("showSwitcher")
@@ -251,6 +254,8 @@ for i in range(1,20):
             area[2] = ''
         print area
         second_driver = webdriver.Firefox()
+        second_driver.set_window_position(1000,0)
+        second_driver.set_window_size(100,600)
         surl = base+rlink[0]    
         second_driver.get(surl)
 

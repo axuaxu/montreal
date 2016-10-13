@@ -22,7 +22,7 @@ c = conn.cursor()
 murl = 'http://www.iu91.com/rs/rent'
 
 #c.execute("SELECT EXISTS(SELECT 1 FROM airports WHERE ICAO='EHAM')")
-num = '45685'
+num = '6854534'
 
 c.execute("SELECT EXISTS(SELECT 1 FROM monrent  WHERE num= %s)" % num)
 if c.fetchone():
@@ -30,3 +30,7 @@ if c.fetchone():
 
 else:
     print("Not found...")
+
+sinsert = 'insert into monrent (title) values()'
+c.commit()
+c.close()
